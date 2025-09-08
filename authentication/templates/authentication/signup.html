@@ -1,0 +1,254 @@
+{% extends "authentication/base.html" %}
+{% block title %}Sign Up - Django Auth{% endblock %}
+
+{% block content %}
+<div class="card-header">
+  <h2 class="mb-0"><i class="fas fa-user-plus me-2"></i>Create Account</h2>
+  <p class="mb-0 mt-2 opacity-75">Join us today and get started</p>
+</div>
+
+<div class="card-body">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <i class="fas fa-{% if message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %} me-2"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="first_name" class="form-label">
+          <i class="fas fa-user me-2"></i>First Name
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" 
+                 class="form-control" 
+                 id="first_name" 
+                 name="first_name" 
+                 placeholder="Enter first name"
+                 required>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="last_name" class="form-label">
+          <i class="fas fa-user me-2"></i>Last Name
+        </label>
+        <div class="input-group">
+          <span class="input-group-text">
+            <i class="fas fa-user"></i>
+          </span>
+          <input type="text" 
+                 class="form-control" 
+                 id="last_name" 
+                 name="last_name" 
+                 placeholder="Enter last name"
+                 required>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="username" class="form-label">
+        <i class="fas fa-at me-2"></i>Username
+      </label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-at"></i>
+        </span>
+        <input type="text" 
+               class="form-control" 
+               id="username" 
+               name="username" 
+               placeholder="Choose a username"
+               required
+               autocomplete="username">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">
+        <i class="fas fa-envelope me-2"></i>Email Address
+      </label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-envelope"></i>
+        </span>
+        <input type="email" 
+               class="form-control" 
+               id="email" 
+               name="email" 
+               placeholder="Enter your email"
+               required
+               autocomplete="email">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password1" class="form-label">
+        <i class="fas fa-lock me-2"></i>Password
+      </label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-lock"></i>
+        </span>
+        <input type="password" 
+               class="form-control" 
+               id="password1" 
+               name="password1" 
+               placeholder="Create a strong password"
+               required
+               autocomplete="new-password">
+        <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+      <div class="form-text">
+        <small class="text-muted">
+          <i class="fas fa-info-circle me-1"></i>
+          Password must be at least 8 characters long
+        </small>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="password2" class="form-label">
+        <i class="fas fa-lock me-2"></i>Confirm Password
+      </label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-lock"></i>
+        </span>
+        <input type="password" 
+               class="form-control" 
+               id="password2" 
+               name="password2" 
+               placeholder="Confirm your password"
+               required
+               autocomplete="new-password">
+        <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+        <label class="form-check-label" for="terms">
+          I agree to the <a href="#" class="link-primary">Terms of Service</a> and <a href="#" class="link-primary">Privacy Policy</a>
+        </label>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+        <label class="form-check-label" for="newsletter">
+          Subscribe to our newsletter for updates and offers
+        </label>
+      </div>
+    </div>
+
+    <div class="d-grid mb-3">
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="fas fa-user-plus me-2"></i>Create Account
+      </button>
+    </div>
+
+    <div class="text-center mb-3">
+      <hr class="my-3">
+      <span class="text-muted small">or sign up with</span>
+    </div>
+
+    <div class="row g-2 mb-4">
+      <div class="col-6">
+        <button type="button" class="btn btn-outline-primary w-100">
+          <i class="fab fa-google me-2"></i>Google
+        </button>
+      </div>
+      <div class="col-6">
+        <button type="button" class="btn btn-outline-dark w-100">
+          <i class="fab fa-github me-2"></i>GitHub
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <p class="text-muted mb-0">
+        Already have an account? 
+        <a href="{% url 'login' %}" class="link-primary">Sign in here</a>
+      </p>
+    </div>
+  </form>
+</div>
+
+<script>
+function setupPasswordToggle(toggleId, passwordId) {
+  document.getElementById(toggleId).addEventListener('click', function() {
+    const password = document.getElementById(passwordId);
+    const icon = this.querySelector('i');
+    
+    if (password.type === 'password') {
+      password.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      password.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  });
+}
+
+setupPasswordToggle('togglePassword1', 'password1');
+setupPasswordToggle('togglePassword2', 'password2');
+
+document.getElementById('password2').addEventListener('input', function() {
+  const password1 = document.getElementById('password1').value;
+  const password2 = this.value;
+  
+  if (password2 && password1 !== password2) {
+    this.setCustomValidity('Passwords do not match');
+  } else {
+    this.setCustomValidity('');
+  }
+});
+
+document.querySelector('form').addEventListener('submit', function(e) {
+  const requiredFields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2'];
+  let isValid = true;
+  
+  requiredFields.forEach(function(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field.value.trim()) {
+      isValid = false;
+      field.classList.add('is-invalid');
+    } else {
+      field.classList.remove('is-invalid');
+    }
+  });
+  
+  const terms = document.getElementById('terms');
+  if (!terms.checked) {
+    isValid = false;
+    terms.classList.add('is-invalid');
+  } else {
+    terms.classList.remove('is-invalid');
+  }
+  
+  if (!isValid) {
+    e.preventDefault();
+    alert('Please fill in all required fields and accept the terms.');
+  }
+});
+</script>
+{% endblock %}
