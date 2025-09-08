@@ -1,0 +1,136 @@
+{% extends "authentication/base.html" %}
+{% block title %}Sign In - Django Auth{% endblock %}
+
+{% block content %}
+<div class="card-header">
+  <h2 class="mb-0"><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
+  <p class="mb-0 mt-2 opacity-75">Sign in to your account</p>
+</div>
+
+<div class="card-body">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <i class="fas fa-{% if message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %} me-2"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    
+    <div class="mb-4">
+      <label for="username" class="form-label">
+        <i class="fas fa-user me-2"></i>Username or Email
+      </label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-user"></i>
+        </span>
+        <input type="text" 
+               class="form-control" 
+               id="username" 
+               name="username" 
+               placeholder="Enter your username or email"
+               required
+               autocomplete="username">
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="password" class="form-label">
+        <i class="fas fa-lock me-2"></i>Password
+      </label>
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="fas fa-lock"></i>
+        </span>
+        <input type="password" 
+               class="form-control" 
+               id="password" 
+               name="password" 
+               placeholder="Enter your password"
+               required
+               autocomplete="current-password">
+        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="remember" name="remember">
+          <label class="form-check-label" for="remember">
+            Remember me
+          </label>
+        </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <a href="{% url 'forgot_password' %}" class="link-primary small">Forgot password?</a>
+      </div>
+    </div>
+
+    <div class="d-grid mb-3">
+      <button type="submit" class="btn btn-success btn-lg">
+        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+      </button>
+    </div>
+
+    <div class="text-center mb-3">
+      <hr class="my-3">
+      <span class="text-muted small">or</span>
+    </div>
+
+    <div class="row g-2 mb-4">
+      <div class="col-6">
+        <button type="button" class="btn btn-outline-primary w-100">
+          <i class="fab fa-google me-2"></i>Google
+        </button>
+      </div>
+      <div class="col-6">
+        <button type="button" class="btn btn-outline-dark w-100">
+          <i class="fab fa-github me-2"></i>GitHub
+        </button>
+      </div>
+    </div>
+
+    <div class="text-center">
+      <p class="text-muted mb-0">
+        Don't have an account? 
+        <a href="{% url 'signup' %}" class="link-primary">Create one here</a>
+      </p>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById('togglePassword').addEventListener('click', function() {
+  const password = document.getElementById('password');
+  const icon = this.querySelector('i');
+  
+  if (password.type === 'password') {
+    password.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+  } else {
+    password.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+  }
+});
+
+document.querySelector('form').addEventListener('submit', function(e) {
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  
+  if (!username || !password) {
+    e.preventDefault();
+    alert('Please fill in all required fields.');
+  }
+});
+</script>
+{% endblock %}
